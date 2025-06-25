@@ -2,6 +2,9 @@
   "npmClient": "yarn",
   "private": true,
   "author": "Prev Wong <prevwong@gmail.com>",
+  "contributors": [
+    "Tom Drewes <tom.drewes@aveosystems.com>"
+  ],
   "scripts": {
     "dev": "./scripts/dev.sh",
     "dev:site": "lerna run start --scope site",

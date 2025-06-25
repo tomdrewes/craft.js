@@ -1,7 +1,7 @@
 import { QueryCallbacksFor, Delete, PatchListenerAction } from '@craftjs/utils';
 
 import { Placement } from './events';
-import { Nodes, NodeEventTypes, NodeId, Node } from './nodes';
+import { Nodes, NodeEventTypes, NodeId, Node, UserComponent } from './nodes';
 
 import { QueryMethods } from '../editor/query';
 import { EditorStore, ActionMethodsWithConfig } from '../editor/store';
@@ -38,7 +38,10 @@ export type Options = {
   ) => void;
 };
 
-export type Resolver = Record<string, string | React.ElementType>;
+export type Resolver = Record<
+  string,
+  string | React.ElementType | UserComponent
+>;
 
 export interface Indicator {
   placement: Placement;

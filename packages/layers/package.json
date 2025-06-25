@@ -1,6 +1,6 @@
 {
   "name": "@craftjs/layers",
-  "description": "A Photoshop-like layers panel for your page editor",
+  "description": "A Photoshop-like layers panel for your page editor - Aveo Systems fork",
   "keywords": [
     "wysiwyg",
     "html",
@@ -11,8 +11,11 @@
     "web-builder",
     "react"
   ],
-  "version": "0.2.7",
+  "version": "0.3.0",
   "author": "Prev Wong <prevwong@gmail.com>",
+  "contributors": [
+    "Tom Drewes <tom.drewes@aveosystems.com>"
+  ],
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "license": "MIT",
@@ -35,7 +38,7 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/utils": "^0.2.5",
+    "@craftjs/utils": "^0.3.0",
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {

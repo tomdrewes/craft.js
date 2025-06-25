@@ -1,8 +1,11 @@
 {
   "name": "@craftjs/utils",
-  "description": "Utilities used internally across the craft.js monorepo",
-  "version": "0.2.5",
+  "description": "Utilities used internally across the craft.js monorepo - Aveo Systems fork",
+  "version": "0.3.0",
   "author": "Prev Wong <prevwong@gmail.com>",
+  "contributors": [
+    "Tom Drewes <tom.drewes@aveosystems.com>"
+  ],
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

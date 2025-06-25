@@ -8,7 +8,7 @@ import produce, {
 import isEqualWith from 'lodash/isEqualWith';
 import { useMemo, useEffect, useRef, useCallback } from 'react';
 
-import { History, HISTORY_ACTIONS } from './History';
+import { History, HistoryListener, HISTORY_ACTIONS } from './History';
 import { Delete } from './utilityTypes';
 
 enableMapSet();
@@ -130,6 +130,7 @@ export type QueryCallbacksFor<M extends QueryMethods> = M extends QueryMethods<
       history: {
         canUndo: () => boolean;
         canRedo: () => boolean;
+        listen: (listener: HistoryListener) => () => boolean;
       };
     }
   : {};
@@ -436,6 +437,7 @@ export function createQuery<Q extends QueryMethods>(
     history: {
       canUndo: () => history.canUndo(),
       canRedo: () => history.canRedo(),
+      listen: (listener: HistoryListener) => history.listen(listener),
     },
   };
 }

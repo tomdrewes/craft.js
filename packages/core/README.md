@@ -17,6 +17,8 @@
   </strong>
 </p>
 
+<strong>This repository contains a fork of the original craft.js project, with some feature additions/revisions by Aveo Systems. The original MIT license terms are unchanged.</strong>
+
 Page editors are a great way to provide an excellent user experience. However, to build one is often a pretty dreadful task.
 
 There're existing libraries that come with a fully working page editor out of the box with a user interface and editable components. However, if you wish to make customisations such as modifying the user interface and its behavior, it will most definitely involve modifying the library itself.
