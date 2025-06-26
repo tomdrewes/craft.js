@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/prevwong/craft.js/",
   "dependencies": {
-    "@craftjs/utils": "^0.3.0",
+    "@craftjs/utils": "https://gitpkg.vercel.app/tomdrewes/craft.js/packages/utils?0.3.0",
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
