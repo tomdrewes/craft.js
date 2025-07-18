@@ -42,9 +42,9 @@
     "react-contenteditable": "^3.3.3"
   },
   "devDependencies": {
-    "@babel/core": "7.7.4",
-    "@svgr/rollup": "6.5.1",
-    "styled-components": "6.1.13"
+    "@babel/core": "^7.7.4",
+    "@svgr/rollup": "^6.5.1",
+    "styled-components": "^6.1.13"
   },
   "peerDependencies": {
     "@craftjs/core": ">=0.2.0",

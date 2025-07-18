@@ -1,6 +1,7 @@
 // https://github.com/pelotom/use-methods
-import produce, {
+import {
   Patch,
+  produce,
   produceWithPatches,
   enableMapSet,
   enablePatches,
