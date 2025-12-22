@@ -10,7 +10,9 @@ import { NodeContext } from './NodeContext';
 import { useInternalEditor } from '../editor/useInternalEditor';
 import { Node } from '../interfaces';
 
-export function useInternalNode<S = null>(collect?: (node: Node) => S) {
+export function useInternalNode<S = null, P = Record<string, any>>(
+  collect?: (node: Node) => S
+) {
   const context = useContext(NodeContext);
   invariant(context, ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT);
 
@@ -36,7 +38,7 @@ export function useInternalNode<S = null>(collect?: (node: Node) => S) {
 
   const actions = useMemo(() => {
     return {
-      setProp: (cb: any, throttleRate?: number) => {
+      setProp: (cb: (props: P) => void, throttleRate?: number) => {
         if (throttleRate) {
           EditorActions.history.throttle(throttleRate).setProp(id, cb);
         } else {
