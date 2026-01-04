@@ -48,6 +48,7 @@ export const RenderEditorIndicator = () => {
         ? indicatorOptions.error
         : indicatorOptions.success,
       transition: indicatorOptions.transition || '0.2s ease-in',
+      pointerEvents: 'none',
       ...(indicatorOptions.style ?? {}),
     },
     parentDom: indicator.placement.parent.dom,

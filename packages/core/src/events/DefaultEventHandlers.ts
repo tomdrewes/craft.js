@@ -193,9 +193,21 @@ export class DefaultEventHandlers<O = {}> extends CoreEventHandlers<
           }
         );
 
+        const unbindDragLeave = this.addCraftEventListener(
+          el,
+          'dragleave',
+          (e) => {
+            e.craft.stopPropagation();
+            e.preventDefault();
+
+            this.positioner?.removeIndicator();
+          }
+        );
+
         return () => {
           unbindDragEnter();
           unbindDragOver();
+          unbindDragLeave();
         };
       },
       drag: (el: HTMLElement, id: NodeId) => {
