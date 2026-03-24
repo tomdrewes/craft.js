@@ -17,6 +17,11 @@ export const DefaultRender = () => {
   );
 
   return useMemo(() => {
+    // Handle case where node was deleted from the store while the component was
+    // still mounted. Return null until React finishes reconciliation and unmounts
+    // this component via its parent re-render.
+    if (!type || !props) return null;
+
     let children = props.children;
 
     if (nodes && nodes.length > 0) {
