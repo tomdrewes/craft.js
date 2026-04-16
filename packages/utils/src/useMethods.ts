@@ -20,7 +20,7 @@ export type SubscriberAndCallbacksFor<
   Q extends QueryMethods = any
 > = {
   subscribe: Watcher<StateFor<M>>['subscribe'];
-  getState: () => { prev: StateFor<M>; current: StateFor<M> };
+  getState: () => StateFor<M>;
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
   history: History;

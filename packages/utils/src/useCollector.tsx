@@ -14,10 +14,7 @@ export type useCollectorReturnType<
 > = ConditionallyMergeRecordTypes<C, CollectorMethods<S>>;
 export function useCollector<S extends SubscriberAndCallbacksFor<any, any>, C>(
   store: S,
-  collector?: (
-    state: ReturnType<S['getState']>['current'],
-    query: S['query']
-  ) => C
+  collector?: (state: ReturnType<S['getState']>, query: S['query']) => C
 ): useCollectorReturnType<S, C> {
   const { subscribe, getState, actions, query } = store;
 
@@ -35,7 +32,10 @@ export function useCollector<S extends SubscriberAndCallbacksFor<any, any>, C>(
 
   // Collect states for initial render
   if (initial.current && collector) {
-    collected.current = collector(getState(), query);
+    collected.current = collector(
+      getState() as ReturnType<S['getState']>,
+      query
+    );
     initial.current = false;
   }
 
@@ -48,7 +48,8 @@ export function useCollector<S extends SubscriberAndCallbacksFor<any, any>, C>(
     let unsubscribe;
     if (collectorRef.current) {
       unsubscribe = subscribe(
-        (current) => collectorRef.current(current, query),
+        (current) =>
+          collectorRef.current(current as ReturnType<S['getState']>, query),
         (collected) => {
           setRenderCollected(onCollect(collected));
         }

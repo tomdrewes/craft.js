@@ -1,7 +1,7 @@
 {
   "name": "@craftjs/utils",
   "description": "Utilities used internally across the craft.js monorepo - Aveo Systems fork",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Prev Wong <prevwong@gmail.com>",
   "contributors": [
     "Tom Drewes <tom.drewes@aveosystems.com>"
