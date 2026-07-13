@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import shallowEqual from 'shallowequal';
 
 import { SubscriberAndCallbacksFor } from './useMethods';
 import { ConditionallyMergeRecordTypes } from './utilityTypes';
@@ -54,11 +55,24 @@ export function useCollector<S extends SubscriberAndCallbacksFor<any, any>, C>(
           setRenderCollected(onCollect(collected));
         }
       );
+
+      // Re-collect immediately on (re)subscribe. `renderCollected` was seeded at
+      // the initial render; when this effect re-runs after the tree was hidden
+      // and revealed (e.g. an <Activity> boundary), the store may have changed
+      // in the meantime and nothing else would re-notify us. Guard with a
+      // shallow compare so the normal mount path, where nothing changed, does
+      // not incur an extra commit.
+      const recollected = onCollect(
+        collectorRef.current(getState() as ReturnType<S['getState']>, query)
+      );
+      setRenderCollected((prev) =>
+        shallowEqual(prev, recollected) ? prev : recollected
+      );
     }
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, [onCollect, query, subscribe]);
+  }, [onCollect, query, subscribe, getState]);
 
   return renderCollected;
 }

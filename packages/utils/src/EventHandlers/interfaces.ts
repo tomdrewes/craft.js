@@ -55,6 +55,7 @@ export type ConnectorToRegister = {
 export type RegisteredConnector = {
   id: string;
   required: any;
+  isAttached: () => boolean;
   enable: () => void;
   disable: () => void;
   remove: () => void;

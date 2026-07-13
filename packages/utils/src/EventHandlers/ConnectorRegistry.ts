@@ -36,18 +36,29 @@ export class ConnectorRegistry {
 
     if (existingConnector) {
       if (isEqual(connectorPayload.required, existingConnector.required)) {
+        // Same requirements. Normally this is a no-op so ordinary re-renders
+        // (which re-invoke the connector ref) don't needlessly churn listeners.
+        // But if the entry survived while its listeners were torn down (e.g. an
+        // <Activity> hide disabled the connector without removing the registry
+        // entry), re-enable so the replay on reveal re-attaches instead of
+        // silently no-oping.
+        if (this.isEnabled && !existingConnector.isAttached()) {
+          existingConnector.enable();
+        }
         return existingConnector;
       }
 
-      this.getByElement(element, connectorPayload.name).disable();
+      existingConnector.disable();
     }
 
     let cleanup: () => void | null = null;
+    let attached = false;
 
     const id = this.getConnectorId(element, connectorPayload.name);
     this.registry.set(id, {
       id,
       required: connectorPayload.required,
+      isAttached: () => attached,
       enable: () => {
         if (cleanup) {
           cleanup();
@@ -58,6 +69,7 @@ export class ConnectorRegistry {
           connectorPayload.required,
           connectorPayload.options
         );
+        attached = true;
       },
       disable: () => {
         if (!cleanup) {
@@ -65,6 +77,7 @@ export class ConnectorRegistry {
         }
 
         cleanup();
+        attached = false;
       },
       remove: () => {
         return this.remove(id);

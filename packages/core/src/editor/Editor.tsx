@@ -92,7 +92,7 @@ export const Editor = ({ children, ...options }: EditorProps) => {
   }, [context, options.enabled]);
 
   React.useEffect(() => {
-    context.subscribe(
+    return context.subscribe(
       (_) => ({
         json: context.query.serialize(),
       }),
