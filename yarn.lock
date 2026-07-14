@@ -2390,7 +2390,7 @@ __metadata:
     "@types/react": ^19.2.0
     "@types/react-dom": ^19.2.0
     debounce: ^1.2.0
-    lodash: ^4.17.21
+    lodash: ^4.18.1
     react: ^19.2.0
     tiny-invariant: ^1.0.6
   peerDependencies:
@@ -2415,32 +2415,34 @@ __metadata:
   linkType: soft
 
 "@craftjs/utils@file:../utils::locator=%40craftjs%2Fcore%40workspace%3Apackages%2Fcore":
-  version: 0.3.1
-  resolution: "@craftjs/utils@file:../utils#../utils::hash=f02051&locator=%40craftjs%2Fcore%40workspace%3Apackages%2Fcore"
+  version: 0.3.2
+  resolution: "@craftjs/utils@file:../utils#../utils::hash=ba20dd&locator=%40craftjs%2Fcore%40workspace%3Apackages%2Fcore"
   dependencies:
     immer: ^10.1.1
-    lodash: ^4.17.21
+    lodash: ^4.18.1
     nanoid: ^3.1.23
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: dd9ed03b0a376ddc44748cc383c79f9a3274293065dbd8ddababd0f496d67bb622baf76892d5e98d874fa912651fbf3238b76eb2e6ef60a68708958a342b1ef4
+    react-dom: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: d40d68be2b114919a48657c994e6e5e89f88ef2c0783eebf731db7bb8a148e79759acefc10bde6b8cd6976f631f1ef1f03f99569648fc26538c7a37a7cc7fa14
   languageName: node
   linkType: hard
 
 "@craftjs/utils@file:../utils::locator=%40craftjs%2Flayers%40workspace%3Apackages%2Flayers":
-  version: 0.3.1
-  resolution: "@craftjs/utils@file:../utils#../utils::hash=f02051&locator=%40craftjs%2Flayers%40workspace%3Apackages%2Flayers"
+  version: 0.3.2
+  resolution: "@craftjs/utils@file:../utils#../utils::hash=ba20dd&locator=%40craftjs%2Flayers%40workspace%3Apackages%2Flayers"
   dependencies:
     immer: ^10.1.1
-    lodash: ^4.17.21
+    lodash: ^4.18.1
     nanoid: ^3.1.23
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: dd9ed03b0a376ddc44748cc383c79f9a3274293065dbd8ddababd0f496d67bb622baf76892d5e98d874fa912651fbf3238b76eb2e6ef60a68708958a342b1ef4
+    react-dom: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: d40d68be2b114919a48657c994e6e5e89f88ef2c0783eebf731db7bb8a148e79759acefc10bde6b8cd6976f631f1ef1f03f99569648fc26538c7a37a7cc7fa14
   languageName: node
   linkType: hard
 
@@ -2450,12 +2452,13 @@ __metadata:
   dependencies:
     "@types/react": ^19.2.0
     immer: ^10.1.1
-    lodash: ^4.17.21
+    lodash: ^4.18.1
     nanoid: ^3.1.23
     shallowequal: ^1.1.0
     tiny-invariant: ^1.0.6
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
+    react-dom: ^16.8.0 || ^17 || ^18 || ^19
   languageName: unknown
   linkType: soft
 
@@ -6373,16 +6376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:19.0.3":
-  version: 19.0.3
-  resolution: "@types/react-dom@npm:19.0.3"
-  peerDependencies:
-    "@types/react": ^19.0.0
-  checksum: a253931fc3a41a74ef99a7380fa3fa02b94ddd1addba9fc0aea39c90ce3dfb22d60fbac292669de224b1ffb23836cde3cc78c2425f0c77593435b6368a9fd2ed
-  languageName: node
-  linkType: hard
-
-"@types/react-dom@npm:^19.2.0":
+"@types/react-dom@npm:19.2.3":
   version: 19.2.3
   resolution: "@types/react-dom@npm:19.2.3"
   peerDependencies:
@@ -6432,25 +6426,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 19.1.8
-  resolution: "@types/react@npm:19.1.8"
-  dependencies:
-    csstype: ^3.0.2
-  checksum: 17e0c74d9c01214938fa805aaa8b97925bf3c5514e88fdf94bec42c0a6d4abbc63d4e30255db176f46fd7f0aa89f8085b9b2b2fa5abaffbbf7e5009386ada892
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:19.0.8":
-  version: 19.0.8
-  resolution: "@types/react@npm:19.0.8"
-  dependencies:
-    csstype: ^3.0.2
-  checksum: 80dd2e7fa4b3e0ea2d883c21317563f4af1c4d90a6250c8bcbc052079304dc3335369267026004ed5d7cac09c7b0026e02e71ae5cca3150643507e353219fe47
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^19.2.0":
+"@types/react@npm:19.2.17":
   version: 19.2.17
   resolution: "@types/react@npm:19.2.17"
   dependencies:
@@ -12145,8 +12121,8 @@ __metadata:
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.0
     "@mui/material": ^6.4.3
-    "@types/react": 19.0.8
-    "@types/react-dom": 19.0.3
+    "@types/react": 19.2.17
+    "@types/react-dom": 19.2.3
     clsx: latest
     copy-to-clipboard: 3.2.0
     cross-env: 6.0.3
@@ -12174,9 +12150,9 @@ __metadata:
     "@mui/material": ^6.4.3
     "@types/classnames": 2.2.9
     "@types/node": 12.12.5
-    "@types/react": 19.0.8
+    "@types/react": 19.2.17
     "@types/react-color": 3.0.13
-    "@types/react-dom": 19.0.3
+    "@types/react-dom": 19.2.3
     autoprefixer: latest
     babel-plugin-inline-react-svg: 2.0.1
     classnames: 2.2.6
@@ -16641,10 +16617,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.0.1, lodash@npm:^4.11.2, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
+"lodash@npm:4.18.1":
+  version: 4.18.1
+  resolution: "lodash@npm:4.18.1"
+  checksum: bb5f5b49aad29614e709af02b64c56b0f8b78c6a81434a3c1ae527d2f0f78ca08f9d9fb22aa825a053876c9d2166e9c01f31c356014b5e2bdc0556c057433102
   languageName: node
   linkType: hard
 
