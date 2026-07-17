@@ -29,10 +29,6 @@ export const getDOMInfo = (el: HTMLElement) => {
   const styleInFlow = (parent: HTMLElement) => {
     const parentStyle: any = getComputedStyle(parent);
 
-    if (style.overflow && style.overflow !== 'visible') {
-      return;
-    }
-
     if (parentStyle.float !== 'none') {
       return;
     }
