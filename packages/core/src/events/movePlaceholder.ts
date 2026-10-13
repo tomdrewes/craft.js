@@ -14,6 +14,11 @@ export default function movePlaceholder(
 
   const elDim = bestTargetDomInfo;
 
+  // On a reversed axis, inserting before a child places it after the child on screen
+  if (elDim && elDim.reversed) {
+    where = where === 'before' ? 'after' : 'before';
+  }
+
   if (elDim) {
     // If it's not in flow (like 'float' element)
     if (!elDim.inFlow) {

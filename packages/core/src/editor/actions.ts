@@ -337,7 +337,7 @@ const Methods = (
 
     setNodeEvent(
       eventType: NodeEventTypes,
-      nodeIdSelector: NodeSelector<NodeSelectorType.Id>
+      nodeIdSelector: NodeSelector<NodeSelectorType.Id> | null
     ) {
       state.events[eventType].forEach((id) => {
         if (state.nodes[id]) {
@@ -386,7 +386,7 @@ const Methods = (
      * @param id of the node we want to set
      * @param dom
      */
-    setDOM(id: NodeId, dom: HTMLElement) {
+    setDOM(id: NodeId, dom: HTMLElement | null) {
       if (!state.nodes[id]) {
         return;
       }

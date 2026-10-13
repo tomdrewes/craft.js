@@ -1,11 +1,16 @@
 import { Node, NodeInfo, DropPosition } from '../interfaces';
 
+// Returns the index into childDims of the child the position is relative to.
+// A reversed axis is searched in visual order, which is reverse index order.
 export default function findPosition(
   parent: Node,
-  dims: NodeInfo[],
+  childDims: NodeInfo[],
   posX: number,
   posY: number
 ) {
+  const reversed = childDims.length > 0 && childDims[0].reversed;
+  const dims = reversed ? [...childDims].reverse() : childDims;
+
   let result: DropPosition = {
     parent,
     index: 0,
@@ -59,6 +64,11 @@ export default function findPosition(
         break;
       } else result.where = 'after'; // After last element
     }
+  }
+
+  if (reversed) {
+    result.index = dims.length - 1 - result.index;
+    result.where = result.where === 'before' ? 'after' : 'before';
   }
 
   return result;

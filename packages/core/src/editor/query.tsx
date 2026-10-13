@@ -51,9 +51,9 @@ export function QueryMethods(state: EditorState) {
       source: NodeSelector,
       target: NodeId,
       pos: { x: number; y: number },
-      nodesToDOM: (node: Node) => HTMLElement = (node) =>
+      nodesToDOM: (node: Node) => HTMLElement | null = (node) =>
         state.nodes[node.id].dom
-    ) => {
+    ): Indicator | undefined => {
       const targetNode = state.nodes[target],
         isTargetCanvas = _().node(targetNode.id).isCanvas();
 
@@ -80,15 +80,20 @@ export function QueryMethods(state: EditorState) {
           }, [] as NodeInfo[])
         : [];
 
-      const dropAction = findPosition(
+      const found = findPosition(
         targetParent,
         dimensionsInContainer,
         pos.x,
         pos.y
       );
-      const currentNode =
-        targetParentNodes.length &&
-        state.nodes[targetParentNodes[dropAction.index]];
+      // Children nodesToDOM skips are absent from dimensionsInContainer, so map back to data.nodes
+      const currentNode = dimensionsInContainer.length
+        ? state.nodes[dimensionsInContainer[found.index].id]
+        : null;
+      const dropAction = {
+        ...found,
+        index: currentNode ? targetParentNodes.indexOf(currentNode.id) : 0,
+      };
 
       const output: Indicator = {
         placement: {
