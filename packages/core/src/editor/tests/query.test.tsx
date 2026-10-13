@@ -7,6 +7,7 @@ import {
   secondaryButton,
   documentWithCardState,
 } from '../../tests/fixtures';
+import { createTestNode } from '../../utils/createTestNode';
 import { QueryMethods } from '../query';
 
 let mockedResolveComponent = jest.fn().mockImplementation(() => null);
@@ -185,6 +186,107 @@ describe('query', () => {
   describe('getState', () => {
     it('should return the EditorState', () => {
       expect(query.getState()).toEqual(state);
+    });
+  });
+
+  describe('getDropPlaceholder', () => {
+    const canvasDOM = document.createElement('div');
+
+    // Stacks a 20px-high block element per child; jsdom does no layout
+    const blockAt = (top: number) => {
+      const el = document.createElement('div');
+      canvasDOM.appendChild(el);
+      el.getBoundingClientRect = () =>
+        ({
+          x: 0,
+          y: top,
+          left: 0,
+          top,
+          width: 100,
+          height: 20,
+          right: 100,
+          bottom: top + 20,
+        } as DOMRect);
+      return el;
+    };
+
+    const setNodes = (childIds: string[]) => {
+      const canvas = createTestNode('canvas', {
+        isCanvas: true,
+        nodes: childIds,
+      });
+      canvas.dom = canvasDOM;
+      const children = childIds.map((id) =>
+        createTestNode(id, { parent: 'canvas' })
+      );
+      state.nodes = Object.fromEntries(
+        [canvas, ...children].map((node) => [node.id, node])
+      );
+      query = QueryMethods(state);
+    };
+
+    const source = createTestNode('new');
+
+    beforeEach(() => {
+      jest.spyOn(window, 'getComputedStyle').mockImplementation(
+        () =>
+          (({
+            display: 'block',
+            position: 'static',
+            float: 'none',
+            marginTop: '0',
+            marginRight: '0',
+            marginBottom: '0',
+            marginLeft: '0',
+          } as unknown) as CSSStyleDeclaration)
+      );
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('maps the position back past a child without a DOM', () => {
+      setNodes(['hidden', 'first', 'second']);
+      const doms = { first: blockAt(0), second: blockAt(20) };
+
+      const indicator = query.getDropPlaceholder(
+        source,
+        'canvas',
+        { x: 50, y: 25 },
+        (node) => doms[node.id] || null
+      );
+
+      expect(indicator.placement.index).toBe(2);
+      expect(indicator.placement.where).toBe('before');
+      expect(indicator.placement.currentNode.id).toBe('second');
+    });
+
+    it('has no current node in an empty canvas', () => {
+      setNodes([]);
+
+      const indicator = query.getDropPlaceholder(source, 'canvas', {
+        x: 50,
+        y: 25,
+      });
+
+      expect(indicator.placement.index).toBe(0);
+      expect(indicator.placement.currentNode).toBeNull();
+      expect(indicator.error).toBeNull();
+    });
+
+    it('has no current node when every child is skipped', () => {
+      setNodes(['badge']);
+
+      const indicator = query.getDropPlaceholder(
+        source,
+        'canvas',
+        { x: 50, y: 25 },
+        () => null
+      );
+
+      expect(indicator.placement.index).toBe(0);
+      expect(indicator.placement.currentNode).toBeNull();
     });
   });
 });

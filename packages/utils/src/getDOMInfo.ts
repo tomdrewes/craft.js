@@ -26,21 +26,30 @@ export const getDOMInfo = (el: HTMLElement) => {
     top: parseInt(style.paddingTop),
   };
 
-  const styleInFlow = (parent: HTMLElement) => {
-    const parentStyle: any = getComputedStyle(parent);
+  // The axis children are laid out on: inFlow is the vertical (block) axis, otherwise horizontal.
+  // reversed means the visual order runs against the index order along that axis.
+  const layoutAxis = (parent: HTMLElement) => {
+    const parentStyle = getComputedStyle(parent);
 
+    switch (parentStyle.display) {
+      case 'flex':
+      case 'inline-flex': {
+        const direction = parentStyle.flexDirection;
+        return {
+          inFlow: direction.startsWith('column'),
+          reversed: direction.endsWith('-reverse'),
+        };
+      }
+      case 'grid':
+      case 'inline-grid':
+        return { inFlow: false, reversed: false };
+    }
+
+    return { inFlow: !!styleInFlow(parentStyle), reversed: false };
+  };
+
+  const styleInFlow = (parentStyle: CSSStyleDeclaration) => {
     if (parentStyle.float !== 'none') {
-      return;
-    }
-
-    if (parentStyle.display === 'grid') {
-      return;
-    }
-
-    if (
-      parentStyle.display === 'flex' &&
-      parentStyle['flex-direction'] !== 'column'
-    ) {
       return;
     }
 
@@ -72,6 +81,10 @@ export const getDOMInfo = (el: HTMLElement) => {
     return;
   };
 
+  const axis = el.parentElement
+    ? layoutAxis(el.parentElement)
+    : { inFlow: false, reversed: false };
+
   return {
     x,
     y,
@@ -85,6 +98,7 @@ export const getDOMInfo = (el: HTMLElement) => {
     outerHeight: Math.round(height + margin.top + margin.bottom),
     margin,
     padding,
-    inFlow: el.parentElement && !!styleInFlow(el.parentElement),
+    inFlow: axis.inFlow,
+    reversed: axis.reversed,
   };
 };

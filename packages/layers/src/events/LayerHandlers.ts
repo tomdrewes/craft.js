@@ -1,4 +1,5 @@
 import { NodeId, Node, DerivedCoreEventHandlers } from '@craftjs/core';
+import { ROOT_NODE } from '@craftjs/utils';
 
 import { LayerIndicator } from '../interfaces';
 
@@ -203,12 +204,37 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
       drag: (el: HTMLElement, layerId: NodeId) => {
         el.setAttribute('draggable', 'true');
 
+        // With dropOnLayersOnly, drops the indicator while the pointer is outside the Layers
+        // panel, so that a release there commits nothing. Client coordinates are used because WebKit can report a null
+        // relatedTarget on drag events.
+        const onWindowDragOver = (e: DragEvent) => {
+          const rootLayer = this.getLayer(ROOT_NODE);
+          const panel = rootLayer && rootLayer.dom;
+          if (!panel || !LayerHandlers.events.indicator) {
+            return;
+          }
+
+          const rect = panel.getBoundingClientRect();
+          if (
+            e.clientX < rect.left ||
+            e.clientX > rect.right ||
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom
+          ) {
+            LayerHandlers.events.indicator = null;
+            layerStore.actions.setIndicator(null);
+          }
+        };
+
         const unbindDragStart = this.addCraftEventListener(
           el,
           'dragstart',
           (e) => {
             e.craft.stopPropagation();
             LayerHandlers.draggedElement = layerId;
+            if (layerStore.getState().options.dropOnLayersOnly) {
+              window.addEventListener('dragover', onWindowDragOver, true);
+            }
           }
         );
 
@@ -231,10 +257,12 @@ export class LayerHandlers extends DerivedCoreEventHandlers<{
           LayerHandlers.draggedElement = null;
           LayerHandlers.events.indicator = null;
           layerStore.actions.setIndicator(null);
+          window.removeEventListener('dragover', onWindowDragOver, true);
         });
 
         return () => {
           el.removeAttribute('draggable');
+          window.removeEventListener('dragover', onWindowDragOver, true);
           unbindDragStart();
           unbindDragEnd();
         };

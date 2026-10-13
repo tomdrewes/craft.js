@@ -18,5 +18,8 @@ module.exports = {
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleNameMapper: {
     '^nanoid(/(.*)|$)': 'nanoid$1',
+    // Resolve workspace packages to their sources, as tsconfig.json's paths do, rather than to
+    // installed copies or builds that can be stale
+    '^@craftjs/(core|layers|utils)$': '<rootDir>/packages/$1/src',
   },
 };

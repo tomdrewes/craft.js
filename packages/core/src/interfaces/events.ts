@@ -18,6 +18,7 @@ export type DOMInfo = Record<
   number
 > & {
   inFlow: boolean;
+  reversed: boolean;
   margin: Record<'top' | 'left' | 'bottom' | 'right', number>;
   padding: Record<'top' | 'left' | 'bottom' | 'right', number>;
 };
@@ -25,7 +26,7 @@ export type DOMInfo = Record<
 export interface DropPosition {
   parent: Node;
   index: number;
-  where: string;
+  where: 'before' | 'after';
 }
 
 export type Placement = DropPosition & {

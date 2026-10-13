@@ -15,6 +15,9 @@ export type LayerEvents = 'selected' | 'hovered';
 export type LayerOptions = {
   expandRootOnLoad: boolean;
   renderLayer: React.ElementType;
+  // Drops only onto layers: leaving the Layers panel during a drag clears the indicator, so a
+  // release outside it commits nothing
+  dropOnLayersOnly?: boolean;
 };
 
 export type LayerIndicator = Indicator & {

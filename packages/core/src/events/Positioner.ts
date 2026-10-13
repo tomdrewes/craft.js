@@ -221,7 +221,11 @@ export class Positioner {
    * Compute a new Indicator object based on the dropTarget and x,y coords
    * Returns null if theres no change from the previous Indicator
    */
-  computeIndicator(dropTargetId: NodeId, x: number, y: number): Indicator {
+  computeIndicator(
+    dropTargetId: NodeId,
+    x: number,
+    y: number
+  ): Indicator | undefined {
     let newParentNode = this.getCanvasAncestor(dropTargetId);
 
     if (!newParentNode) {
@@ -248,12 +252,18 @@ export class Positioner {
     this.currentTargetChildDimensions = this.getChildDimensions(newParentNode);
     this.currentTargetId = newParentNode.id;
 
-    const position = findPosition(
-      newParentNode,
-      this.currentTargetChildDimensions,
-      x,
-      y
-    );
+    const childDimensions = this.currentTargetChildDimensions;
+    const found = findPosition(newParentNode, childDimensions, x, y);
+    // Children without a DOM are absent from childDimensions, so map back to data.nodes
+    const currentNodeId = childDimensions.length
+      ? childDimensions[found.index].id
+      : null;
+    const position: DropPosition = {
+      ...found,
+      index: currentNodeId
+        ? newParentNode.data.nodes.indexOf(currentNodeId)
+        : 0,
+    };
 
     // Ignore if the position is similar as the previous one
     if (!this.isDiff(position)) {
@@ -272,9 +282,9 @@ export class Positioner {
       );
     }
 
-    const currentNodeId = newParentNode.data.nodes[position.index];
-    const currentNode =
-      currentNodeId && this.store.query.node(currentNodeId).get();
+    const currentNode = currentNodeId
+      ? this.store.query.node(currentNodeId).get()
+      : null;
 
     this.currentIndicator = {
       placement: {
@@ -287,7 +297,7 @@ export class Positioner {
     return this.currentIndicator;
   }
 
-  getIndicator() {
+  getIndicator(): Indicator | null {
     return this.currentIndicator;
   }
 
