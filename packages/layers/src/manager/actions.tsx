@@ -1,4 +1,17 @@
-import { LayerState, LayerEvents } from '../interfaces';
+import { Layer, LayerState, LayerEvents } from '../interfaces';
+
+// A layer's connectors can run before its LayerNode registers it, so every action that creates a
+// layer starts from the same complete shape.
+const defaultLayer = (state: LayerState, id: string): Layer => ({
+  dom: null,
+  headingDom: null,
+  expanded: !!state.options.defaultExpanded,
+  id,
+  event: {
+    selected: false,
+    hovered: false,
+  },
+});
 
 export const LayerMethods = (state: LayerState) => ({
   setLayerEvent: (eventType: LayerEvents, id: string) => {
@@ -18,16 +31,7 @@ export const LayerMethods = (state: LayerState) => ({
   },
   registerLayer: (id: string) => {
     if (!state.layers[id]) {
-      state.layers[id] = {
-        dom: null,
-        headingDom: null,
-        expanded: false,
-        id,
-        event: {
-          selected: false,
-          hovered: false,
-        },
-      };
+      state.layers[id] = defaultLayer(state, id);
     }
   },
   setDOM: (
@@ -35,7 +39,7 @@ export const LayerMethods = (state: LayerState) => ({
     domCollection: Partial<Record<'dom' | 'headingDom', HTMLElement>>
   ) => {
     state.layers[id] = {
-      ...state.layers[id],
+      ...(state.layers[id] ?? defaultLayer(state, id)),
       ...(domCollection.dom ? { dom: domCollection.dom } : {}),
       ...(domCollection.headingDom
         ? { headingDom: domCollection.headingDom }

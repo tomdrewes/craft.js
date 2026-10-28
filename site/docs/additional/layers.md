@@ -54,8 +54,10 @@ export default function App() {
 ### `<Layers />`
 #### Props
 <API items={[
-  ["expandRootOnLoad?", "boolean", "Optional. If enabled, the Root Node will be expanded by default"],
+  ["defaultExpanded?", "boolean", "Optional. Every layer, including one added later, starts expanded. The tree then mounts in a single render however deep it is. Makes `expandRootOnLoad` unnecessary"],
+  ["expandRootOnLoad?", "boolean", "Deprecated: use `defaultExpanded`. Optional. Expands the Root Node's layer once, after it mounts. Other layers start collapsed unless `defaultExpanded` is set"],
   ["renderLayer?", "React.ReactElement", "Optional. Specify the component to render each layer"],
+  ["dropOnLayersOnly?", "boolean", "Optional. A drag started in the Layers panel drops only onto layers: moving the pointer outside the panel clears the drop indicator, so a release there commits nothing"],
 ]} /> 
 
 ### `useLayer`
@@ -75,7 +77,8 @@ export default function App() {
       ["layerHeading", "(dom: HTMLElement, nodeId: String) => HTMLElement", "Specifies the DOM that represents the layer's heading"]
     ]],
     ["actions", "Object", [
-      ["toggleLayer", "() => void", "Toggle the corresponding Layer's expanded state"]
+      ["toggleLayer", "() => void", "Toggle the corresponding Layer's expanded state"],
+      ["setExpandedState", "(expanded: boolean) => void", "Set the corresponding Layer's expanded state"]
     ]]
   ]]
 ]} /> 

@@ -1,5 +1,33 @@
 # @craftjs/layers
 
+## 0.3.2
+
+### Minor Changes
+
+- Add the `defaultExpanded` option: every layer, including one added later, starts expanded.
+
+- A layer renders without waiting for its registration, so under `defaultExpanded` the whole tree mounts in a single render. Previously the tree mounted one level per commit, and a deep tree exceeded React's limit of 50 nested updates ("Maximum update depth exceeded").
+
+- Deprecate `expandRootOnLoad` in favor of `defaultExpanded`.
+
+### Patch Changes
+
+- `expandRootOnLoad` and expanding to the selected node set the layer expanded rather than toggling it, so neither collapses a layer that is already expanded.
+
+- A layer whose DOM is connected before it registers gets complete defaults, rather than a layer with only `dom` that registration then skips.
+
+## 0.3.1
+
+### Minor Changes
+
+- Add the `dropOnLayersOnly` option: a drag started in the Layers panel drops only onto layers, and a release outside the panel commits nothing.
+
+## 0.3.0
+
+### Minor Changes
+
+- First release of the Aveo Systems fork: package metadata, and a dependency on the fork's `@craftjs/utils`.
+
 ## 0.2.7
 
 ### Patch Changes

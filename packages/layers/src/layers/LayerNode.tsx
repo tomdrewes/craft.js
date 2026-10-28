@@ -1,5 +1,5 @@
 import { useEditor, ROOT_NODE } from '@craftjs/core';
-import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useRef, useEffect, useLayoutEffect } from 'react';
 
 import { LayerContextProvider } from './LayerContextProvider';
 import { useLayer } from './useLayer';
@@ -23,19 +23,23 @@ export const LayerNode = () => {
   });
 
   const {
-    actions: { registerLayer, toggleLayer },
+    actions: { registerLayer, setExpandedState },
     renderLayer,
     expandRootOnLoad,
+    defaultExpanded,
   } = useLayerManager((state) => ({
     renderLayer: state.options.renderLayer,
     expandRootOnLoad: state.options.expandRootOnLoad,
+    defaultExpanded: state.options.defaultExpanded,
   }));
 
-  const [isRegistered, setRegistered] = useState(false);
+  // Rendering doesn't wait for registration: a layer not yet registered takes the expanded state it
+  // will register with, so under defaultExpanded a whole tree mounts in one commit and registers in
+  // one batch of layout effects, however deep it is.
+  const isExpanded = expanded ?? !!defaultExpanded;
 
   useLayoutEffect(() => {
     registerLayer(id);
-    setRegistered(true);
   }, [registerLayer, id]);
 
   const expandedRef = useRef<boolean>(expanded);
@@ -47,22 +51,22 @@ export const LayerNode = () => {
 
   useEffect(() => {
     if (!expandedRef.current && shouldBeExpanded) {
-      toggleLayer(id);
+      setExpandedState(id, true);
     }
-  }, [toggleLayer, id, shouldBeExpanded]);
+  }, [setExpandedState, id, shouldBeExpanded]);
 
   useEffect(() => {
     if (shouldBeExpandedOnLoad.current) {
-      toggleLayer(id);
+      setExpandedState(id, true);
     }
-  }, [toggleLayer, id]);
+  }, [setExpandedState, id]);
 
-  return data && isRegistered ? (
+  return data ? (
     <div className={`craft-layer-node ${id}`}>
       {React.createElement(
         renderLayer,
         {},
-        children && expanded
+        children && isExpanded
           ? children.map((id) => (
               <LayerContextProvider key={id} id={id} depth={depth + 1} />
             ))
