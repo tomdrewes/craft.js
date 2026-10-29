@@ -8,8 +8,10 @@ import {
 } from 'immer';
 import isEqualWith from 'lodash/isEqualWith';
 import { useMemo, useEffect, useRef, useCallback } from 'react';
+import invariant from 'tiny-invariant';
 
 import { History, HistoryListener, HISTORY_ACTIONS } from './History';
+import { ERROR_BATCH_ASYNC } from './constants';
 import { Delete } from './utilityTypes';
 
 enableMapSet();
@@ -24,6 +26,7 @@ export type SubscriberAndCallbacksFor<
   actions: CallbacksFor<M>;
   query: QueryCallbacksFor<Q>;
   history: History;
+  batch: (fn: () => void) => void;
 };
 
 export type StateFor<M extends MethodsOrOptions> = M extends MethodsOrOptions<
@@ -414,6 +417,7 @@ export function useMethods<
       actions,
       query,
       history,
+      batch: (fn) => watcher.batch(fn),
     }),
     [actions, query, watcher, getState, history]
   ) as any;
@@ -446,6 +450,8 @@ export function createQuery<Q extends QueryMethods>(
 class Watcher<S> {
   getState;
   subscribers: Subscriber[] = [];
+  private batchDepth = 0;
+  private pending = false;
 
   constructor(getState) {
     this.getState = getState;
@@ -476,7 +482,29 @@ class Watcher<S> {
     }
   }
 
+  /**
+   * Runs fn, deferring subscriber notifications until the outermost batch
+   * returns; the state itself still updates on every dispatch
+   */
+  batch(fn: () => void) {
+    this.batchDepth++;
+    try {
+      const result: unknown = fn();
+      invariant(!(result instanceof Promise), ERROR_BATCH_ASYNC);
+    } finally {
+      this.batchDepth--;
+      if (this.batchDepth === 0 && this.pending) {
+        this.pending = false;
+        this.notify();
+      }
+    }
+  }
+
   notify() {
+    if (this.batchDepth > 0) {
+      this.pending = true;
+      return;
+    }
     this.subscribers.forEach((subscriber) => subscriber.collect());
   }
 }

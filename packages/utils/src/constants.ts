@@ -51,3 +51,7 @@ Please only use useEditor in components that are children of the <Editor /> comp
 export const ERROR_USE_NODE_OUTSIDE_OF_EDITOR_CONTEXT = `You can only use useNode in the context of <Editor />. 
 
 Please only use useNode in components that are children of the <Editor /> component.`;
+
+export const ERROR_BATCH_ASYNC = `store.batch only batches synchronous work, but it was passed a function that returned a Promise.
+
+Dispatches after the first await run outside the batch, so pass a synchronous function.`;

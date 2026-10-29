@@ -3,7 +3,7 @@ import * as React from 'react';
 import invariant from 'tiny-invariant';
 
 import { EditorContext } from './EditorContext';
-import { useEditorStore } from './store';
+import { editorInitialState, useEditorStore } from './store';
 
 import { Events } from '../events';
 import { Options } from '../interfaces';
@@ -93,9 +93,12 @@ export const Editor = ({ children, ...options }: EditorProps) => {
 
   React.useEffect(() => {
     return context.subscribe(
-      (_) => ({
-        json: context.query.serialize(),
-      }),
+      // serializing the whole page after every action is costly, so skip it
+      // while onNodesChange is still the store's default
+      (state) =>
+        state.options.onNodesChange === editorInitialState.options.onNodesChange
+          ? null
+          : { json: context.query.serialize() },
       () => {
         context.query.getOptions().onNodesChange(context.query);
       }
